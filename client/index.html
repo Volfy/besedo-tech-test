@@ -1,62 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <script type='module' src='./scripts/main.js' defer></script>
-  <link rel="stylesheet" href="./styles/reset.css">
-  <link rel="stylesheet" href="./styles/index.css">
-
-  <title>Mega Lorem Ipsum - Andre Sammut</title>
-</head>
-<body>
-  <header>
-    <h1>Mega Lorem Ipsum</h1>
-  </header>
-  <main>
-    <div id='scroll-lock-container'>
-      <table id='movie-table' aria-label='Table of IMDb Movie Data'>
-        <caption>
-          IMDb Movie Data
-        </caption>
-        <colgroup>
-          <col id='name-column'>
-          <col id='year-column'>
-          <col id='rating-column'>
-          <col id='genre-column'>
-          <col id='duration-column'>
-          <colgroup id='actions-column' span='2'>
-            <col>
-            <col>
-          </colgroup>
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope='col' class='name-header'>Name</th>
-            <th scope='col'>Year</th>
-            <th scope='col'>Rating</th>
-            <th scope='col' class='genre-header'>Genre</th>
-            <th scope='col'>Duration</th>
-            <td colspan='2'></td>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
-
-    <div>
-      <button type='button' aria-label='Add Movie'>
-        <img src='./img/add.svg' aria-hidden>
-      </button>
-    </div>
-    
-
-  </main>
-  <footer>
-    <p>Besedo Full Stack Developer Technical Test</p>
-  </footer>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mega Lorem Ipsum - Andre Sammut</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

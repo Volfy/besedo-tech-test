@@ -4,7 +4,7 @@ const cleanedData = data.map(row => ({
   title: row.title,
   year: row.year,
   imbd_rating: row.imbd_rating,
-  genre: row.genre,
+  genre: row.genre.replace(/,/g, ' '),
   duration: row.duration,
   movie_id: row.movie_id,
 }))

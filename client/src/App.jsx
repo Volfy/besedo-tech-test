@@ -50,7 +50,7 @@ function App() {
           <div>Andre Sammut</div>
         </footer>
       </div>
-      <Modal showModal={showModal} firstClick={firstClick} />
+      <Modal setShowModal={setShowModal} showModal={showModal} firstClick={firstClick} type='ADD' />
     </>
   )
 }

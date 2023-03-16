@@ -4,13 +4,47 @@ import Table from './components/Table'
 import Modal from './components/Modal'
 
 function App() {
-  const [showModal, setShowModal] = useState(false)
-  const [firstClick, setFirstClick] = useState(false)
+  const [hasModalBeenShownYet, setHasModalBeenShownYet] = useState(false)
+  const [modalType, setModalType] = useState('closed')
+  const [selectedMovieId, setSelectedMovieId] = useState(null)
+
+  const isModalShown = modalType !== 'closed'
+
+  const handleModalOps = (button, id) => {
+    if (!hasModalBeenShownYet) { setHasModalBeenShownYet(true) }
+    switch (button) {
+      case 'add':
+        setModalType('add')
+        return
+      case 'edit':
+        setModalType('edit')
+        setSelectedMovieId(id)
+        return
+      case 'delete':
+        setModalType('delete')
+        setSelectedMovieId(id)
+        return
+      case 'close':
+        setModalType('closed')
+        setSelectedMovieId(null)
+        return
+      default:
+        setModalType('closed')
+        setSelectedMovieId(null)
+        // eslint-disable-next-line no-console
+        console.error('default reached')
+    }
+  }
 
   return (
     <>
       <div
-        className={`${firstClick && (showModal ? 'container-blur' : 'container-focus')}
+        className={`
+        ${hasModalBeenShownYet
+          && (isModalShown
+            ? 'container-blur'
+            : 'container-focus'
+          )}
         w-screen h-screen
         flex flex-col content-center md:justify-evenly`}
       >
@@ -30,18 +64,13 @@ function App() {
           </h2>
 
           <div className='h-1 2xl:w-4/6 self-center flex-grow overflow-y-scroll scrollbar-hide b'>
-            <Table data={data} showModal={showModal} />
+            <Table
+              data={data}
+              handleModalOps={handleModalOps}
+              isModalShown={isModalShown}
+            />
           </div>
 
-          <button
-            type='button'
-            onClick={() => {
-              if (!firstClick) { setFirstClick(true) }
-              setShowModal(!showModal)
-            }}
-          >
-            SHOW MODAL
-          </button>
         </main>
 
         <footer className='basis-1/12 flex flex-col justify-evenly text-center'>
@@ -50,7 +79,13 @@ function App() {
           <div>Andre Sammut</div>
         </footer>
       </div>
-      <Modal setShowModal={setShowModal} showModal={showModal} firstClick={firstClick} type='ADD' />
+      <Modal
+        selectedMovieId={selectedMovieId}
+        modalType={modalType}
+        handleModalOps={handleModalOps}
+        isModalShown={isModalShown}
+        hasModalBeenShownYet={hasModalBeenShownYet}
+      />
     </>
   )
 }

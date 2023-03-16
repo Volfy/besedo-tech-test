@@ -1,16 +1,20 @@
+const fs = require('fs')
+
 const data = require('./movies-original.json')
 
-const cleanedData = data.map(row => ({
+const cleanedData = data.map((row) => ({
   title: row.title,
   year: row.year,
-  imbd_rating: row.imbd_rating,
-  genre: row.genre.replace(/,/g, ' '),
+  rating: row.imbd_rating,
+  genre: row.genre.split(','),
   duration: row.duration,
   movie_id: row.movie_id,
 }))
 
-const fs = require('fs')
+const genreOptions = [...new Set(data.map((row) => row.genre).join().split(','))]
+console.log(genreOptions)
+
 fs.writeFileSync(
   'movies.json',
-  JSON.stringify(cleanedData)
+  JSON.stringify(cleanedData),
 )

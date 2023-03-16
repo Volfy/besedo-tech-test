@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@react-hook/media-query'
 import { PropTypes } from 'prop-types'
 
-function LargeRow({ row, idx }) {
+function LargeRow({ row, idx, handleModalOps }) {
   return (
     <tr
       className={`text-center rounded-xl hover:drop-shadow-xl
@@ -33,7 +33,7 @@ function LargeRow({ row, idx }) {
       </td>
       <td>
         <button
-          onClick={() => console.log('edit', row.title)}
+          onClick={() => handleModalOps('edit', row.movie_id)}
           aria-label='Edit'
           type='button'
           className='align-middle'
@@ -51,7 +51,7 @@ function LargeRow({ row, idx }) {
       </td>
       <td className='rounded-r-xl pr-0'>
         <button
-          onClick={() => console.log('delete', row.title)}
+          onClick={() => handleModalOps('delete', row.movie_id)}
           aria-label='Delete'
           type='button'
           className='align-middle'
@@ -74,9 +74,10 @@ function LargeRow({ row, idx }) {
 LargeRow.propTypes = {
   row: PropTypes.object.isRequired,
   idx: PropTypes.number.isRequired,
+  handleModalOps: PropTypes.func.isRequired,
 }
 
-function Card({ row, idx }) {
+function Card({ row, idx, handleModalOps }) {
   return (
     <tr className={`flex flex-col w-10/12 rounded-2xl m-3 p-6 shadow-xl
       ${idx % 2 ? 'bg-slate-300' : 'bg-slate-100'}`}
@@ -109,7 +110,7 @@ function Card({ row, idx }) {
       </td>
       <td className='text-center'>
         <button
-          onClick={() => console.log('edit', row.title)}
+          onClick={() => handleModalOps('edit', row.movie_id)}
           aria-label='Edit'
           type='button'
           className='align-middle'
@@ -125,7 +126,7 @@ function Card({ row, idx }) {
           </svg>
         </button>
         <button
-          onClick={() => console.log('delete', row.title)}
+          onClick={() => handleModalOps('delete', row.movie_id)}
           aria-label='Delete'
           type='button'
           className='align-middle'
@@ -148,10 +149,12 @@ function Card({ row, idx }) {
 Card.propTypes = {
   row: PropTypes.object.isRequired,
   idx: PropTypes.number.isRequired,
+  handleModalOps: PropTypes.func.isRequired,
 }
 
-function Table({ data, showModal }) {
+function Table({ data, handleModalOps, isModalShown }) {
   const isSmallWidth = useMediaQuery('(min-width: 768px)')
+
   return (
     <table
       aria-labelledby='table-description'
@@ -203,8 +206,8 @@ function Table({ data, showModal }) {
       <tbody className='rounded-2xl flex flex-col justify-center items-center w-full md:table-row-group'>
         {data.map((row, idx, _v) => (
           isSmallWidth
-            ? <LargeRow row={row} idx={idx} key={row.movie_id} />
-            : <Card row={row} idx={idx} key={row.movie_id} />
+            ? <LargeRow row={row} idx={idx} key={row.movie_id} handleModalOps={handleModalOps} />
+            : <Card row={row} idx={idx} key={row.movie_id} handleModalOps={handleModalOps} />
         ))}
       </tbody>
 
@@ -216,13 +219,13 @@ function Table({ data, showModal }) {
             lg:text-center z-10'
           >
             <button
-              onClick={() => console.log('add new')}
+              onClick={() => handleModalOps('add')}
               aria-label='Add a Movie'
               type='button'
               className={`bg-green-500 hover:bg-white rounded-full p-4 m-4
               group hover:ring-4 hover:ring-green-500 hover:shadow-xl
               lg:m-1 lg:p-3
-              ${showModal ? null : 'pointer-events-auto'}`}
+              ${isModalShown ? null : 'pointer-events-auto'}`}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -243,7 +246,8 @@ function Table({ data, showModal }) {
 
 Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  showModal: PropTypes.bool.isRequired,
+  handleModalOps: PropTypes.func.isRequired,
+  isModalShown: PropTypes.bool.isRequired,
 }
 
 export default Table

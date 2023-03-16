@@ -150,14 +150,13 @@ Card.propTypes = {
   idx: PropTypes.number.isRequired,
 }
 
-function Table({ data }) {
+function Table({ data, showModal }) {
   const isSmallWidth = useMediaQuery('(min-width: 768px)')
   return (
     <table
       aria-labelledby='table-description'
       className='border-spacing-y-2 border-separate mx-1 md:mx-4'
     >
-      {/* caption ruins style, but aria-labelled by  */}
       {isSmallWidth
         ? (
           <>
@@ -176,7 +175,7 @@ function Table({ data }) {
         )
         : <colgroup className='w-full' />}
 
-      <thead className='hidden md:table-header-group sticky top-0 z-50'>
+      <thead className='hidden md:table-header-group sticky top-0 z-40'>
         <tr aria-hidden className='absolute bg-white w-full h-4 -z-10'>
           {/* hide table rows underneath headers due to rounded corners */}
           <td colSpan='7' className='w-full' />
@@ -214,15 +213,16 @@ function Table({ data }) {
           <td
             colSpan='7'
             className='text-right pointer-events-none
-            lg:text-center '
+            lg:text-center z-10'
           >
             <button
               onClick={() => console.log('add new')}
               aria-label='Add a Movie'
               type='button'
-              className='bg-green-500 hover:bg-white rounded-full p-4 m-4
+              className={`bg-green-500 hover:bg-white rounded-full p-4 m-4
               group hover:ring-4 hover:ring-green-500 hover:shadow-xl
-              pointer-events-auto lg:m-1 lg:p-3'
+              lg:m-1 lg:p-3
+              ${showModal ? null : 'pointer-events-auto'}`}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -243,6 +243,7 @@ function Table({ data }) {
 
 Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  showModal: PropTypes.bool.isRequired,
 }
 
 export default Table

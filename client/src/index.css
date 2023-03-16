@@ -12,3 +12,53 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+
+@keyframes modalAppear {
+  from {
+    @apply opacity-0;
+    transform: scale(0)
+  }
+  to {
+    @apply opacity-100;
+    transform: scale(1)
+  }
+}
+
+.modal {
+  animation: modalAppear 0.75s forwards;
+}
+
+@keyframes modalHide {
+  from {
+    @apply opacity-100;
+    transform: scale(1)
+  }
+  to {
+    @apply opacity-0;
+    transform: scale(0)
+  }
+}
+
+.modal-hidden { 
+  animation: modalHide 0.75s forwards;
+}
+
+@keyframes behindModalBlur {
+  from {filter: blur(0);}
+  to {filter: blur(2px);}
+}
+
+.container-blur {
+  animation: behindModalBlur 1s forwards;
+  @apply pointer-events-none
+}
+
+@keyframes behindModalFocus {
+  from {filter: blur(2px);}
+  to {filter: blur(0);}
+}
+
+.container-focus {
+  animation: behindModalFocus 1s forwards;
+}

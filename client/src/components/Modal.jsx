@@ -13,9 +13,21 @@ function switchWrap(type) {
   }
 }
 
-function Modal({ type }) {
+function Modal({ showModal, firstClick, type }) {
+  const modalStatus = () => {
+    if (firstClick) {
+      return showModal ? 'absolute modal' : 'absolute modal-hidden'
+    }
+    return 'hidden'
+  }
   return (
-    <div className='w-96 h-96 absolute right-1/2 left-1/2 -ml-48 -mr-48  z-50 bg-white'>
+    <div className={`${modalStatus()}
+    w-96 h-96 z-50 
+    right-1/2 left-1/2 -ml-48 -mr-48 
+    top-1/2 bottom-1/2 -mt-48 -mb-48 
+    rounded-2xl bg-indigo-900
+    shadow-2xl shadow-indigo-900`}
+    >
       {switchWrap(type)}
     </div>
   )
@@ -23,6 +35,8 @@ function Modal({ type }) {
 
 Modal.propTypes = {
   type: PropTypes.string.isRequired,
+  showModal: PropTypes.bool.isRequired,
+  firstClick: PropTypes.bool.isRequired,
 }
 
 export default Modal

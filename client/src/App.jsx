@@ -80,6 +80,7 @@ function App() {
         </footer>
       </div>
       <Modal
+        data={data}
         selectedMovieId={selectedMovieId}
         modalType={modalType}
         handleModalOps={handleModalOps}

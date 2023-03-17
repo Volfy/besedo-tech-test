@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import data from './movies'
+import { useQuery } from 'react-query'
 import Table from './components/Table'
 import Modal from './components/Modal'
+import { getMovies } from './requests'
 
 function App() {
   const [hasModalBeenShownYet, setHasModalBeenShownYet] = useState(false)
@@ -36,6 +37,19 @@ function App() {
     }
   }
 
+  const result = useQuery('movies', getMovies, {
+    refetchOnWindowFocus: false,
+  })
+
+  if (result.isError) {
+    return <div>Error getting data.</div>
+  }
+  if (result.isLoading) {
+    return <div>Loading data, please wait!</div>
+  }
+
+  const movieData = result.data
+
   return (
     <>
       <div
@@ -65,7 +79,7 @@ function App() {
 
           <div className='h-1 2xl:w-4/6 self-center flex-grow overflow-y-scroll scrollbar-hide b'>
             <Table
-              data={data}
+              movieData={movieData}
               handleModalOps={handleModalOps}
               isModalShown={isModalShown}
             />
@@ -80,7 +94,7 @@ function App() {
         </footer>
       </div>
       <Modal
-        data={data}
+        movieData={movieData}
         selectedMovieId={selectedMovieId}
         modalType={modalType}
         handleModalOps={handleModalOps}

@@ -1,7 +1,21 @@
 import { PropTypes } from 'prop-types'
 import { useEffect, useRef } from 'react'
+import { useQuery } from 'react-query'
+import { getGenres } from '../requests'
 
 function Form({ modalType, row }) {
+  const result = useQuery('genres', getGenres, {
+    refetchOnWindowFocus: false,
+  })
+  if (result.isLoading) {
+    return <div>Loading genres.</div>
+  }
+  if (result.isError) {
+    return <div>Error getting genres.</div>
+  }
+
+  const genres = result.data
+
   const add = (event) => {
     event.preventDefault()
     console.log(event.target)
@@ -40,7 +54,7 @@ function Form({ modalType, row }) {
           type='number'
           name='rating'
           id='rating'
-          defaultValue={row.imdb_rating || ''}
+          defaultValue={row.rating || ''}
           min='0'
           max='10'
           step='0.1'
@@ -58,9 +72,7 @@ function Form({ modalType, row }) {
           required
           className='text-black'
         >
-          <option defaultValue='Action'>Action</option>
-          <option defaultValue='Drama'>Drama</option>
-          <option defaultValue='Fantasy'>Fantasy</option>
+          {genres.map((g) => <option key={g} value={g}>{g}</option>)}
         </select>
       </label>
       <label htmlFor='duration' className='text-lg text-white flex gap-4'>
@@ -77,7 +89,7 @@ function Form({ modalType, row }) {
           className='text-black'
         />
       </label>
-      <button type='submit' className={`rounded-xl bg-white w-1/4 p-1 ${row.movie_id ? 'hover:bg-orange-500' : 'hover:bg-green-500'} hover:text-white`}>
+      <button type='submit' className={`self-end rounded-xl bg-white w-1/4 p-1 ${row.movie_id ? 'hover:bg-orange-500' : 'hover:bg-green-500'} hover:text-white`}>
         {row.movie_id ? 'Edit' : 'Add'}
       </button>
     </form>
@@ -90,18 +102,18 @@ function Form({ modalType, row }) {
         type='submit'
         id='deletebtn'
         value='Delete'
-        className='rounded-xl w-1/4 p-1 bg-white text-rose-600 hover:text-white hover:bg-rose-600'
+        className='self-end rounded-xl w-1/4 p-1 bg-white text-rose-600 hover:text-white hover:bg-rose-600'
       />
     </form>
   )
 
   switch (modalType) {
+    case 'add':
+      return addOrEditForm()
     case 'edit':
       return addOrEditForm()
     case 'delete':
       return deleteForm
-    case 'add':
-      return addOrEditForm()
     default:
       return ''
   }
@@ -116,7 +128,7 @@ Form.defaultProps = {
 }
 
 function Modal({
-  data,
+  movieData,
   isModalShown,
   hasModalBeenShownYet,
   modalType,
@@ -135,11 +147,11 @@ function Modal({
   const heading = () => {
     switch (modalType) {
       case 'edit':
-        return `Edit ${data
+        return `Edit ${movieData
           .filter((m) => m.movie_id === selectedMovieId)[0]
           .title}`
       case 'delete':
-        return `Delete ${data
+        return `Delete ${movieData
           .filter((m) => m.movie_id === selectedMovieId)[0]
           .title}`
       case 'add':
@@ -189,13 +201,16 @@ function Modal({
           </svg>
         </button>
       </div>
-      <Form modalType={modalType} row={data.filter((m) => m.movie_id === selectedMovieId)[0]} />
+      <Form
+        modalType={modalType}
+        row={movieData.filter((m) => m.movie_id === selectedMovieId)[0]}
+      />
     </div>
   )
 }
 
 Modal.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  movieData: PropTypes.arrayOf(PropTypes.object).isRequired,
   modalType: PropTypes.string.isRequired,
   handleModalOps: PropTypes.func.isRequired,
   selectedMovieId: PropTypes.string,

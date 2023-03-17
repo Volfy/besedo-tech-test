@@ -14,7 +14,7 @@ function LargeRow({ row, idx, handleModalOps }) {
         {row.year}
       </td>
       <td className='p-3'>
-        {row.imdb_rating}
+        {row.rating}
       </td>
       <td className='p-3'>
         {row.duration}
@@ -91,7 +91,7 @@ function Card({ row, idx, handleModalOps }) {
       </td>
       <td>
         <span className='font-bold'>Rating: </span>
-        {row.imdb_rating}
+        {row.rating}
       </td>
       <td>
         <span className='font-bold'>Duration: </span>
@@ -152,7 +152,7 @@ Card.propTypes = {
   handleModalOps: PropTypes.func.isRequired,
 }
 
-function Table({ data, handleModalOps, isModalShown }) {
+function Table({ movieData, handleModalOps, isModalShown }) {
   const isSmallWidth = useMediaQuery('(min-width: 768px)')
 
   return (
@@ -204,7 +204,7 @@ function Table({ data, handleModalOps, isModalShown }) {
       </thead>
 
       <tbody className='rounded-2xl flex flex-col justify-center items-center w-full md:table-row-group'>
-        {data.map((row, idx, _v) => (
+        {movieData.map((row, idx, _v) => (
           isSmallWidth
             ? <LargeRow row={row} idx={idx} key={row.movie_id} handleModalOps={handleModalOps} />
             : <Card row={row} idx={idx} key={row.movie_id} handleModalOps={handleModalOps} />
@@ -245,7 +245,7 @@ function Table({ data, handleModalOps, isModalShown }) {
 }
 
 Table.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  movieData: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleModalOps: PropTypes.func.isRequired,
   isModalShown: PropTypes.bool.isRequired,
 }

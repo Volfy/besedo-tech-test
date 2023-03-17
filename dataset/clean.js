@@ -20,6 +20,8 @@ const cleanedData = data.map((row) => ({
   duration: row.duration,
   movie_id: row.movie_id,
 }))
+  // shuffles the array to stop it from looking sorted
+  .sort(() => ((Math.random() > 0.5) ? 1 : -1))
 
 fs.writeFileSync(
   'movies.json',

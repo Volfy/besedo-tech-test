@@ -1,28 +1,91 @@
 import { PropTypes } from 'prop-types'
 import { useEffect, useRef } from 'react'
-import { useQuery } from 'react-query'
-import { getGenres } from '../requests'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import {
+  createMovie,
+  deleteMovie,
+  getGenres,
+  updateMovie,
+} from '../requests'
 
-function Form({ modalType, row }) {
-  const result = useQuery('genres', getGenres, {
-    refetchOnWindowFocus: false,
-  })
-  if (result.isLoading) {
-    return <div>Loading genres.</div>
-  }
-  if (result.isError) {
-    return <div>Error getting genres.</div>
-  }
+function AddForm({ handleSubmit, genres }) {
+  return (
+    <form action='' onSubmit={handleSubmit} className='flex-grow flex flex-col justify-between pb-6 px-6'>
+      <label htmlFor='title' className='text-lg text-white flex gap-4'>
+        Title:
+        <input
+          type='text'
+          name='title'
+          id='title'
+          minLength='3'
+          required
+          className='text-black'
+        />
+      </label>
+      <label htmlFor='year' className='text-lg text-white flex gap-4'>
+        Year:
+        <input
+          type='number'
+          name='year'
+          id='year'
+          min='1900'
+          max='2040'
+          required
+          className='text-black'
+        />
+      </label>
+      <label htmlFor='rating' className='text-lg text-white flex gap-4'>
+        Rating:
+        <input
+          type='number'
+          name='rating'
+          id='rating'
+          min='0'
+          max='10'
+          step='0.1'
+          required
+          className='text-black'
+        />
+      </label>
+      <label htmlFor='genre' className='text-lg text-white flex gap-4'>
+        Genre(s):
+        <select
+          name='genre'
+          id='genre'
+          multiple
+          required
+          className='text-black'
+        >
+          {genres.map((g) => <option key={g} value={g}>{g}</option>)}
+        </select>
+      </label>
+      <label htmlFor='duration' className='text-lg text-white flex gap-4'>
+        Duration:
+        <input
+          type='text'
+          name='duration'
+          id='duration'
+          pattern='[0-9]h\s[0-5]?[0-9]m'
+          required
+          onInvalid={(event) => event.target.setCustomValidity('Please enter a value in the form Xh XXm or Xh Xm')}
+          onInput={(event) => event.target.setCustomValidity('')}
+          className='text-black'
+        />
+      </label>
+      <button type='submit' className='self-end rounded-xl bg-white w-1/4 p-1 hover:bg-green-500 hover:text-white'>
+        Add
+      </button>
+    </form>
+  )
+}
+AddForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  genres: PropTypes.array.isRequired,
+}
 
-  const genres = result.data
-
-  const add = (event) => {
-    event.preventDefault()
-    console.log(event.target)
-  }
-
-  const addOrEditForm = () => (
-    <form action='' onSubmit={add} className='flex-grow flex flex-col justify-between pb-6 px-6'>
+function EditForm({ row, handleSubmit, genres }) {
+  return (
+    <form action='' onSubmit={handleSubmit} className='flex-grow flex flex-col justify-between pb-6 px-6'>
       <label htmlFor='title' className='text-lg text-white flex gap-4'>
         Title:
         <input
@@ -89,14 +152,21 @@ function Form({ modalType, row }) {
           className='text-black'
         />
       </label>
-      <button type='submit' className={`self-end rounded-xl bg-white w-1/4 p-1 ${row.movie_id ? 'hover:bg-orange-500' : 'hover:bg-green-500'} hover:text-white`}>
-        {row.movie_id ? 'Edit' : 'Add'}
+      <button type='submit' className='self-end rounded-xl bg-white w-1/4 p-1 hover:bg-orange-500 hover:text-white'>
+        Edit
       </button>
     </form>
   )
+}
+EditForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  genres: PropTypes.array.isRequired,
+  row: PropTypes.object.isRequired,
+}
 
-  const deleteForm = (
-    <form action='' onSubmit={add} className='flex-grow flex flex-col justify-between pb-6 px-6'>
+function DeleteForm({ handleSubmit }) {
+  return (
+    <form action='' onSubmit={handleSubmit} className='flex-grow flex flex-col justify-between pb-6 px-6'>
       <div className='text-lg text-white flex gap-4'>Are you sure you want to delete? </div>
       <input
         type='submit'
@@ -106,14 +176,89 @@ function Form({ modalType, row }) {
       />
     </form>
   )
+}
+DeleteForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+}
+
+function Form({ modalType, row, handleClose }) {
+  const queryClient = useQueryClient()
+
+  const newMovieMutation = useMutation(createMovie)
+  const updateMovieMutation = useMutation(updateMovie)
+  const deleteMovieMutation = useMutation(deleteMovie)
+
+  const result = useQuery('genres', getGenres, {
+    refetchOnWindowFocus: false,
+  })
+  if (result.isLoading) {
+    return <div>Loading genres.</div>
+  }
+  if (result.isError) {
+    return <div>Error getting genres.</div>
+  }
+
+  const genres = result.data
+
+  const handleAdd = (event) => {
+    event.preventDefault()
+    const newMovie = {
+      title: event.target.title.value,
+      year: event.target.year.value,
+      rating: event.target.rating.value,
+      duration: event.target.duration.value,
+      genre: [...event.target.genre].filter((g) => g.selected).map((g) => g.value),
+    }
+    newMovieMutation.mutate(newMovie, {
+      onSuccess: (movie) => {
+        const movies = queryClient.getQueryData('movies')
+        queryClient.setQueryData('movies', movies.concat({ ...newMovie, movie_id: movie.movie_id }))
+      },
+    })
+    handleClose()
+  }
+  const handleEdit = (event) => {
+    event.preventDefault()
+    const editedMovie = {
+      title: event.target.title.value,
+      year: event.target.year.value,
+      rating: event.target.rating.value,
+      duration: event.target.duration.value,
+      genre: [...event.target.genre].filter((g) => g.selected).map((g) => g.value),
+      movie_id: row.movie_id,
+    }
+    updateMovieMutation.mutate(editedMovie, {
+      onSuccess: () => {
+        const movies = queryClient.getQueryData('movies')
+        queryClient.setQueryData(
+          'movies',
+          movies.map((m) => (m.movie_id === editedMovie.movie_id ? editedMovie : m)),
+        )
+      },
+    })
+    handleClose()
+  }
+  const handleDelete = (event) => {
+    event.preventDefault()
+    deleteMovieMutation.mutate(row.movie_id, {
+      onSuccess: () => {
+        const movies = queryClient.getQueryData('movies')
+        queryClient.setQueryData(
+          'movies',
+          movies.filter((m) => (m.movie_id !== row.movie_id)),
+        )
+      },
+    })
+    handleClose()
+  }
 
   switch (modalType) {
     case 'add':
-      return addOrEditForm()
+      return <AddForm handleSubmit={handleAdd} genres={genres} />
     case 'edit':
-      return addOrEditForm()
+      return <EditForm handleSubmit={handleEdit} row={row} genres={genres} />
     case 'delete':
-      return deleteForm
+      return <DeleteForm handleSubmit={handleDelete} />
     default:
       return ''
   }
@@ -121,6 +266,7 @@ function Form({ modalType, row }) {
 Form.propTypes = {
   modalType: PropTypes.string.isRequired,
   row: PropTypes.object,
+  handleClose: PropTypes.func.isRequired,
 }
 
 Form.defaultProps = {
@@ -130,19 +276,13 @@ Form.defaultProps = {
 function Modal({
   movieData,
   isModalShown,
-  hasModalBeenShownYet,
   modalType,
   handleModalOps,
   selectedMovieId,
 }) {
   const modalRef = useRef(null)
 
-  const getModalClasses = () => {
-    if (hasModalBeenShownYet) {
-      return isModalShown ? 'absolute modal' : 'absolute modal-hidden'
-    }
-    return 'hidden'
-  }
+  const getModalClasses = () => (isModalShown ? 'absolute modal' : 'absolute modal-hidden')
 
   const heading = () => {
     switch (modalType) {
@@ -203,6 +343,7 @@ function Modal({
       </div>
       <Form
         modalType={modalType}
+        handleClose={() => handleModalOps('close')}
         row={movieData.filter((m) => m.movie_id === selectedMovieId)[0]}
       />
     </div>
@@ -215,7 +356,6 @@ Modal.propTypes = {
   handleModalOps: PropTypes.func.isRequired,
   selectedMovieId: PropTypes.string,
   isModalShown: PropTypes.bool.isRequired,
-  hasModalBeenShownYet: PropTypes.bool.isRequired,
 }
 Modal.defaultProps = {
   selectedMovieId: null,

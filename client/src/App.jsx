@@ -93,14 +93,17 @@ function App() {
           <div>Andre Sammut</div>
         </footer>
       </div>
-      <Modal
-        movieData={movieData}
-        selectedMovieId={selectedMovieId}
-        modalType={modalType}
-        handleModalOps={handleModalOps}
-        isModalShown={isModalShown}
-        hasModalBeenShownYet={hasModalBeenShownYet}
-      />
+      {hasModalBeenShownYet
+        ? (
+          <Modal
+            movieData={movieData}
+            selectedMovieId={selectedMovieId}
+            modalType={modalType}
+            handleModalOps={handleModalOps}
+            isModalShown={isModalShown}
+          />
+        )
+        : null}
     </>
   )
 }

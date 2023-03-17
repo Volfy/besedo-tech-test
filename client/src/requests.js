@@ -18,6 +18,6 @@ export const updateMovie = (movie) => axios
   .put(`${baseUrl}/movies/${movie.movie_id}`, movie)
   .then((res) => res.data)
 
-export const deleteMovie = (movie) => axios
-  .delete(`${baseUrl}/movies${movie.movie_id}`)
+export const deleteMovie = (movieId) => axios
+  .delete(`${baseUrl}/movies/${movieId}`)
   .then((res) => res.data)

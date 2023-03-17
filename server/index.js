@@ -77,8 +77,8 @@ app.delete('/api/movies/:id', (req, res) => {
   res.sendStatus(204)
 })
 
-const errorHandler = (error, req, res) => {
-  res.status(400).json(error.message)
+const errorHandler = (req, res, error) => {
+  res.sendStatus(400).json(error.message)
 }
 
 app.use(errorHandler)

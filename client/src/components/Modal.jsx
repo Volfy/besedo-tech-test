@@ -9,27 +9,61 @@ function Form({ modalType, row }) {
 
   const addOrEditForm = () => (
     <form action='' onSubmit={add} className='flex-grow flex flex-col justify-between pb-6 px-6'>
-      <label htmlFor='title'>
+      <label htmlFor='title' className='text-lg text-white flex gap-4'>
         Title:
-        <input type='text' name='title' id='title' defaultValue={row.title || ''} minLength='3' required />
+        <input
+          type='text'
+          name='title'
+          id='title'
+          defaultValue={row.title || ''}
+          minLength='3'
+          required
+          className='text-black'
+        />
       </label>
-      <label htmlFor='year'>
+      <label htmlFor='year' className='text-lg text-white flex gap-4'>
         Year:
-        <input type='number' name='year' id='year' defaultValue={row.year || ''} min='1900' max='2040' required />
+        <input
+          type='number'
+          name='year'
+          id='year'
+          defaultValue={row.year || ''}
+          min='1900'
+          max='2040'
+          required
+          className='text-black'
+        />
       </label>
-      <label htmlFor='rating'>
+      <label htmlFor='rating' className='text-lg text-white flex gap-4'>
         Rating:
-        <input type='number' name='rating' id='rating' defaultValue={row.imdb_rating || ''} min='0' max='10' step='0.1' required />
+        <input
+          type='number'
+          name='rating'
+          id='rating'
+          defaultValue={row.imdb_rating || ''}
+          min='0'
+          max='10'
+          step='0.1'
+          required
+          className='text-black'
+        />
       </label>
-      <label htmlFor='genre'>
+      <label htmlFor='genre' className='text-lg text-white flex gap-4'>
         Genre(s):
-        <select name='genre' id='genre' defaultValue={row.genre || ['']} multiple required>
+        <select
+          name='genre'
+          id='genre'
+          defaultValue={row.genre || ['']}
+          multiple
+          required
+          className='text-black'
+        >
           <option defaultValue='Action'>Action</option>
           <option defaultValue='Drama'>Drama</option>
           <option defaultValue='Fantasy'>Fantasy</option>
         </select>
       </label>
-      <label htmlFor='duration'>
+      <label htmlFor='duration' className='text-lg text-white flex gap-4'>
         Duration:
         <input
           type='text'
@@ -40,9 +74,10 @@ function Form({ modalType, row }) {
           required
           onInvalid={(event) => event.target.setCustomValidity('Please enter a value in the form Xh XXm or Xh Xm')}
           onInput={(event) => event.target.setCustomValidity('')}
+          className='text-black'
         />
       </label>
-      <button type='submit' className={`rounded-xl bg-white w-1/4 p-1 ${row.movie_id ? 'hover:bg-yellow-600' : 'hover:bg-green-600'} hover:text-white`}>
+      <button type='submit' className={`rounded-xl bg-white w-1/4 p-1 ${row.movie_id ? 'hover:bg-orange-500' : 'hover:bg-green-500'} hover:text-white`}>
         {row.movie_id ? 'Edit' : 'Add'}
       </button>
     </form>
@@ -50,12 +85,12 @@ function Form({ modalType, row }) {
 
   const deleteForm = (
     <form action='' onSubmit={add} className='flex-grow flex flex-col justify-between pb-6 px-6'>
-      <div>Are you sure you want to delete? </div>
+      <div className='text-lg text-white flex gap-4'>Are you sure you want to delete? </div>
       <input
         type='submit'
         id='deletebtn'
         value='Delete'
-        className='rounded-xl text-white bg-red-600 w-1/4 p-1 ring-2 ring-red-600 hover:bg-white hover:text-red-600'
+        className='rounded-xl w-1/4 p-1 bg-white text-rose-600 hover:text-white hover:bg-rose-600'
       />
     </form>
   )

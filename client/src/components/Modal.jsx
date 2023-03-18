@@ -10,8 +10,8 @@ import {
 
 function AddForm({ handleSubmit, genres }) {
   return (
-    <form action='' onSubmit={handleSubmit} className='flex-grow flex flex-col justify-between pb-6 px-6'>
-      <label htmlFor='title' className='text-lg text-white flex gap-4'>
+    <form action='' onSubmit={handleSubmit} className='flex-grow flex flex-col justify-between pb-6 px-6 text-lg text-white'>
+      <label htmlFor='title' className='flex gap-4'>
         Title:
         <input
           type='text'
@@ -19,10 +19,10 @@ function AddForm({ handleSubmit, genres }) {
           id='title'
           minLength='3'
           required
-          className='text-black'
+          className='text-black w-36 md:w-96 rounded-xl px-2'
         />
       </label>
-      <label htmlFor='year' className='text-lg text-white flex gap-4'>
+      <label htmlFor='year' className='flex gap-4'>
         Year:
         <input
           type='number'
@@ -31,10 +31,10 @@ function AddForm({ handleSubmit, genres }) {
           min='1900'
           max='2040'
           required
-          className='text-black'
+          className='text-black rounded-xl px-2'
         />
       </label>
-      <label htmlFor='rating' className='text-lg text-white flex gap-4'>
+      <label htmlFor='rating' className='flex gap-4'>
         Rating:
         <input
           type='number'
@@ -44,22 +44,22 @@ function AddForm({ handleSubmit, genres }) {
           max='10'
           step='0.1'
           required
-          className='text-black'
+          className='text-black rounded-xl px-2'
         />
       </label>
-      <label htmlFor='genre' className='text-lg text-white flex gap-4'>
+      <label htmlFor='genre' className='flex gap-4'>
         Genre(s):
         <select
           name='genre'
           id='genre'
           multiple
           required
-          className='text-black'
+          className='text-black rounded-xl px-2'
         >
           {genres.map((g) => <option key={g} value={g}>{g}</option>)}
         </select>
       </label>
-      <label htmlFor='duration' className='text-lg text-white flex gap-4'>
+      <label htmlFor='duration' className='flex gap-4'>
         Duration:
         <input
           type='text'
@@ -69,10 +69,10 @@ function AddForm({ handleSubmit, genres }) {
           required
           onInvalid={(event) => event.target.setCustomValidity('Please enter a value in the form Xh XXm or Xh Xm')}
           onInput={(event) => event.target.setCustomValidity('')}
-          className='text-black'
+          className='text-black w-24 rounded-xl px-2'
         />
       </label>
-      <button type='submit' className='self-end rounded-xl bg-white w-1/4 p-1 hover:bg-green-500 hover:text-white'>
+      <button type='submit' className='self-end rounded-xl text-black bg-white w-1/4 p-1 hover:bg-green-500 hover:text-white'>
         Add
       </button>
     </form>
@@ -85,8 +85,8 @@ AddForm.propTypes = {
 
 function EditForm({ row, handleSubmit, genres }) {
   return (
-    <form action='' onSubmit={handleSubmit} className='flex-grow flex flex-col justify-between pb-6 px-6'>
-      <label htmlFor='title' className='text-lg text-white flex gap-4'>
+    <form action='' onSubmit={handleSubmit} className='flex-grow flex flex-col justify-between pb-6 px-6 text-lg text-white'>
+      <label htmlFor='title' className='flex gap-4'>
         Title:
         <input
           type='text'
@@ -95,10 +95,10 @@ function EditForm({ row, handleSubmit, genres }) {
           defaultValue={row.title || ''}
           minLength='3'
           required
-          className='text-black'
+          className='text-black w-36 md:w-96 rounded-xl px-2'
         />
       </label>
-      <label htmlFor='year' className='text-lg text-white flex gap-4'>
+      <label htmlFor='year' className='flex gap-4'>
         Year:
         <input
           type='number'
@@ -108,10 +108,10 @@ function EditForm({ row, handleSubmit, genres }) {
           min='1900'
           max='2040'
           required
-          className='text-black'
+          className='text-black rounded-xl px-2'
         />
       </label>
-      <label htmlFor='rating' className='text-lg text-white flex gap-4'>
+      <label htmlFor='rating' className='flex gap-4'>
         Rating:
         <input
           type='number'
@@ -122,10 +122,10 @@ function EditForm({ row, handleSubmit, genres }) {
           max='10'
           step='0.1'
           required
-          className='text-black'
+          className='text-black rounded-xl px-2'
         />
       </label>
-      <label htmlFor='genre' className='text-lg text-white flex gap-4'>
+      <label htmlFor='genre' className='flex gap-4'>
         Genre(s):
         <select
           name='genre'
@@ -133,12 +133,12 @@ function EditForm({ row, handleSubmit, genres }) {
           defaultValue={row.genre || ['']}
           multiple
           required
-          className='text-black'
+          className='text-black rounded-xl px-2'
         >
           {genres.map((g) => <option key={g} value={g}>{g}</option>)}
         </select>
       </label>
-      <label htmlFor='duration' className='text-lg text-white flex gap-4'>
+      <label htmlFor='duration' className='flex gap-4'>
         Duration:
         <input
           type='text'
@@ -149,10 +149,10 @@ function EditForm({ row, handleSubmit, genres }) {
           required
           onInvalid={(event) => event.target.setCustomValidity('Please enter a value in the form Xh XXm or Xh Xm')}
           onInput={(event) => event.target.setCustomValidity('')}
-          className='text-black'
+          className='text-black w-24 rounded-xl px-2'
         />
       </label>
-      <button type='submit' className='self-end rounded-xl bg-white w-1/4 p-1 hover:bg-orange-500 hover:text-white'>
+      <button type='submit' className='self-end rounded-xl text-black bg-white w-1/4 p-1 hover:bg-orange-500 hover:text-white'>
         Edit
       </button>
     </form>
@@ -335,7 +335,7 @@ function Modal({
       <div className='text-white py-2 px-2 flex justify-between items-center'>
         <h3 className='text-xl align-middle ml-4'>{heading()}</h3>
         <button type='button' onClick={() => handleModalOps('close')}>
-          <svg xmlns='http://www.w3.org/2000/svg' height='48' width='48' className='fill-white scale-75'>
+          <svg xmlns='http://www.w3.org/2000/svg' height='48' width='48' className='fill-white scale-75 hover:scale-100 hover:fill-red-500'>
             <title>Close</title>
             <path d='m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z' />
           </svg>

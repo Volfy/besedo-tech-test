@@ -1,15 +1,30 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+import { useSearchParams } from 'react-router-dom'
 import Table from './components/Table'
 import Modal from './components/Modal'
 import { getMovies } from './requests'
 
 function App() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [hasModalBeenShownYet, setHasModalBeenShownYet] = useState(false)
-  const [modalType, setModalType] = useState('closed')
-  const [selectedMovieId, setSelectedMovieId] = useState(null)
+  const [modalType, setModalType] = useState(searchParams.get('type'))
+  const [selectedMovieId, setSelectedMovieId] = useState(searchParams.get('movie_id'))
 
   const isModalShown = modalType !== 'closed'
+
+  useEffect(() => {
+    if (modalType && selectedMovieId) {
+      // in case of opening url w params, set Modal to not be hidden
+      if (!hasModalBeenShownYet) { setHasModalBeenShownYet(true) }
+      setSearchParams({ type: modalType, movie_id: selectedMovieId })
+    } if (modalType === 'add') {
+      if (!hasModalBeenShownYet) { setHasModalBeenShownYet(true) }
+      setSearchParams({ type: modalType })
+    } if (modalType === 'closed') {
+      setSearchParams()
+    }
+  }, [modalType])
 
   const handleModalOps = (button, id) => {
     if (!hasModalBeenShownYet) { setHasModalBeenShownYet(true) }

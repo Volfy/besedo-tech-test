@@ -65,7 +65,7 @@ function AddForm({ handleSubmit, genres }) {
           type='text'
           name='duration'
           id='duration'
-          pattern='[0-9]h\s[0-5]?[0-9]m'
+          pattern='[0-9]h(\s[0-5]?[0-9]m)?'
           required
           onInvalid={(event) => event.target.setCustomValidity('Please enter a value in the form Xh XXm or Xh Xm')}
           onInput={(event) => event.target.setCustomValidity('')}
@@ -145,7 +145,7 @@ function EditForm({ row, handleSubmit, genres }) {
           name='duration'
           id='duration'
           defaultValue={row.duration || ''}
-          pattern='[0-9]h\s[0-5]?[0-9]m'
+          pattern='[0-9]h(\s[0-5]?[0-9]m)?'
           required
           onInvalid={(event) => event.target.setCustomValidity('Please enter a value in the form Xh XXm or Xh Xm')}
           onInput={(event) => event.target.setCustomValidity('')}

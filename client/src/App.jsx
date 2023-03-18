@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useSearchParams } from 'react-router-dom'
+import { getMovies } from './requests'
 import Table from './components/Table'
 import Modal from './components/Modal'
-import { getMovies } from './requests'
 
 function App() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [hasModalBeenShownYet, setHasModalBeenShownYet] = useState(false)
-  const [modalType, setModalType] = useState(searchParams.get('type'))
+  const [modalType, setModalType] = useState(searchParams.get('type') || 'closed')
   const [selectedMovieId, setSelectedMovieId] = useState(searchParams.get('movie_id'))
 
   const isModalShown = modalType !== 'closed'
@@ -47,8 +47,6 @@ function App() {
       default:
         setModalType('closed')
         setSelectedMovieId(null)
-        // eslint-disable-next-line no-console
-        console.error('default reached')
     }
   }
 

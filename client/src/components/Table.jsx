@@ -42,7 +42,7 @@ function LargeRow({ row, idx, handleModalOps }) {
             xmlns='http://www.w3.org/2000/svg'
             height='48'
             width='48'
-            className='scale-75 fill-zinc-600 hover:fill-orange-500 '
+            className='scale-75 fill-zinc-600 hover:fill-orange-500 hover:scale-100'
           >
             <title>Edit</title>
             <path d='M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z' />
@@ -60,7 +60,7 @@ function LargeRow({ row, idx, handleModalOps }) {
             xmlns='http://www.w3.org/2000/svg'
             height='48'
             width='48'
-            className='scale-75 fill-zinc-600 hover:fill-rose-600'
+            className='scale-75 fill-zinc-600 hover:fill-rose-600 hover:scale-100'
           >
             <title>Delete</title>
             <path d='M13.05 42q-1.25 0-2.125-.875T10.05 39V10.5H8v-3h9.4V6h13.2v1.5H40v3h-2.05V39q0 1.2-.9 2.1-.9.9-2.1.9Zm21.9-31.5h-21.9V39h21.9Zm-16.6 24.2h3V14.75h-3Zm8.3 0h3V14.75h-3Zm-13.6-24.2V39Z' />
@@ -231,7 +231,7 @@ function Table({ movieData, handleModalOps, isModalShown }) {
                 xmlns='http://www.w3.org/2000/svg'
                 height='48'
                 width='48'
-                className='scale-120 fill-white group-hover:fill-green-500'
+                className='fill-white group-hover:fill-green-500 group-hover:scale-125'
               >
                 <title>Add</title>
                 <path d='M22.5 38V25.5H10v-3h12.5V10h3v12.5H38v3H25.5V38Z' />

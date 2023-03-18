@@ -7,7 +7,7 @@ const validator = (movie) => {
     && movie.rating && movie.rating >= 0 && movie.rating <= 10
     // see whether genres are contained within genreOptions
     && movie.genre && movie.genre.reduce((acc, genre) => acc && genres.includes(genre), true)
-    && movie.duration && movie.duration.length <= 6 && movie.duration.match(/([0-9]h\s[0-5]?[0-9]m)/)
+    && movie.duration && movie.duration.length <= 6 && movie.duration.match(/[0-9]h(\s[0-5]?[0-9]m)?/)
   ) {
     return true
   }

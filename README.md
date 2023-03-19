@@ -1,7 +1,9 @@
 Technologies: 
 
-- Client: React & TailwindCSS.
-- Server: NodeJS with Express.
+Client: React & TailwindCSS.
+
+Server: NodeJS with Express.
+
 
 To run app as a whole:
 

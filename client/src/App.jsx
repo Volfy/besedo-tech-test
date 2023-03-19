@@ -64,7 +64,7 @@ function App() {
 
   const movieData = result.data
 
-  if (modalType !== 'closed' && !movieData.filter((m) => m.movie_id === selectedMovieId).length) {
+  if (modalType !== 'closed' && modalType !== 'add' && !movieData.filter((m) => m.movie_id === selectedMovieId).length) {
     // in the case that a fake movie id is used, allow page to load like normal instead
     setModalType('closed')
     setSelectedMovieId(null)

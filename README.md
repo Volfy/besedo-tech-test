@@ -5,7 +5,7 @@ To run app as a whole:
 - npm start
 
 Access from localhost:3001, 
-access api from localhost:3001/api/
+access api from localhost:3001/api/movies
 
 Client can also be run separately:
 

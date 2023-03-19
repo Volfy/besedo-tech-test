@@ -1,3 +1,6 @@
+Client: React & TailwindCSS.
+Server: NodeJS with Express.
+
 To run app as a whole:
 
 - cd server
@@ -14,3 +17,5 @@ Client can also be run separately:
 - npm run dev
 
 Vite will set the client port itself, check console.
+
+Note that client has not been tested using test suites, only manually.

@@ -1,5 +1,6 @@
 import { PropTypes } from 'prop-types'
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
+
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import {
   createMovie,
@@ -181,7 +182,12 @@ DeleteForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
 }
 
-function Form({ modalType, row, handleClose }) {
+function Form({
+  modalType,
+  row,
+  handleClose,
+  setErrorMessage,
+}) {
   const queryClient = useQueryClient()
 
   const newMovieMutation = useMutation(createMovie)
@@ -213,9 +219,14 @@ function Form({ modalType, row, handleClose }) {
       onSuccess: (movie) => {
         const movies = queryClient.getQueryData('movies')
         queryClient.setQueryData('movies', movies.concat({ ...newMovie, movie_id: movie.movie_id }))
+        setErrorMessage('')
+        handleClose()
+      },
+      onError: () => {
+        setErrorMessage('Movie title must be unique')
+        setTimeout(() => setErrorMessage(''), 3000)
       },
     })
-    handleClose()
   }
   const handleEdit = (event) => {
     event.preventDefault()
@@ -234,9 +245,14 @@ function Form({ modalType, row, handleClose }) {
           'movies',
           movies.map((m) => (m.movie_id === editedMovie.movie_id ? editedMovie : m)),
         )
+        setErrorMessage('')
+        handleClose()
+      },
+      onError: () => {
+        setErrorMessage('Movie title must be unique')
+        setTimeout(() => setErrorMessage(''), 3000)
       },
     })
-    handleClose()
   }
   const handleDelete = (event) => {
     event.preventDefault()
@@ -247,9 +263,14 @@ function Form({ modalType, row, handleClose }) {
           'movies',
           movies.filter((m) => (m.movie_id !== row.movie_id)),
         )
+        setErrorMessage('')
+        handleClose()
+      },
+      onError: () => {
+        setErrorMessage('Unable to delete movie')
+        setTimeout(() => setErrorMessage(''), 3000)
       },
     })
-    handleClose()
   }
 
   switch (modalType) {
@@ -267,6 +288,7 @@ Form.propTypes = {
   modalType: PropTypes.string.isRequired,
   row: PropTypes.object,
   handleClose: PropTypes.func.isRequired,
+  setErrorMessage: PropTypes.func.isRequired,
 }
 
 Form.defaultProps = {
@@ -280,6 +302,7 @@ function Modal({
   handleModalOps,
   selectedMovieId,
 }) {
+  const [errorMessage, setErrorMessage] = useState('')
   const modalRef = useRef(null)
 
   const getModalClasses = () => (isModalShown ? 'absolute modal' : 'absolute modal-hidden')
@@ -341,10 +364,12 @@ function Modal({
           </svg>
         </button>
       </div>
+      <span className='px-4 text-white'>{errorMessage}</span>
       <Form
         modalType={modalType}
         handleClose={() => handleModalOps('close')}
         row={movieData.filter((m) => m.movie_id === selectedMovieId)[0]}
+        setErrorMessage={setErrorMessage}
       />
     </div>
   )

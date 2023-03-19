@@ -34,3 +34,6 @@ content-type: application/json
 
 ###
 DELETE http://localhost:3001/api/movies/tt0111161
+
+###
+GET http://localhost:3001/api/movies/11415477

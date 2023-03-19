@@ -8,6 +8,7 @@ import Modal from './components/Modal'
 function App() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [hasModalBeenShownYet, setHasModalBeenShownYet] = useState(false)
+  // if type is fake, will load modal unnecessarily
   const [modalType, setModalType] = useState(searchParams.get('type') || 'closed')
   const [selectedMovieId, setSelectedMovieId] = useState(searchParams.get('movie_id'))
 
@@ -62,6 +63,13 @@ function App() {
   }
 
   const movieData = result.data
+
+  if (modalType !== 'closed' && !movieData.filter((m) => m.movie_id === selectedMovieId).length) {
+    // in the case that a fake movie id is used, allow page to load like normal instead
+    setModalType('closed')
+    setSelectedMovieId(null)
+    setHasModalBeenShownYet(false)
+  }
 
   return (
     <>

@@ -4,9 +4,9 @@ const validator = require('./validator')
 
 const generateId = () => Math.floor(Math.random() * 100000000)
 
-// ideally, data would be in a database
 // while server is running, data will be saved,
 // but data is not persisted when server is closed.
+// ideally, data would be in a database
 let movies = require('../dataset/movies.json')
 const genres = require('../dataset/genres.json')
 
@@ -40,7 +40,7 @@ app.post('/api/movies/', (req, res, next) => {
     if (validator(movie)) {
       if (!movies.filter((m) => m.title === movie.title).length) {
         // ideally handled by DB
-        movie.movie_id = generateId()
+        movie.movie_id = `tt${generateId()}`
         movies = movies.concat(movie)
         res.json(movie)
         return
@@ -60,9 +60,12 @@ app.put('/api/movies/:id', (req, res, next) => {
   // validate and check uniqueness
   try {
     if (validator(movie)) {
-      movies = movies.map((m) => (m.movie_id === movie.movie_id ? movie : m))
-      res.json(movie)
-      return
+      if (!movies.filter((m) => m.title === movie.title && m.movie_id !== movie.movie_id).length) {
+        movies = movies.map((m) => (m.movie_id === movie.movie_id ? movie : m))
+        res.json(movie)
+        return
+      }
+      throw new Error('Movie is not unique')
     }
     throw new Error('Invalid Movie')
   } catch (error) {
@@ -78,7 +81,7 @@ app.delete('/api/movies/:id', (req, res) => {
 })
 
 const errorHandler = (req, res, error) => {
-  res.sendStatus(400).json(error.message)
+  res.status(400).send({ error: error.message })
 }
 
 app.use(errorHandler)

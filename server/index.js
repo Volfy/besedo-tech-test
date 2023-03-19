@@ -33,44 +33,39 @@ app.get('/api/movies/:id', (req, res) => {
 
 // create
 
-app.post('/api/movies/', (req, res, next) => {
+app.post('/api/movies/', (req, res) => {
   const movie = req.body
   // validate and check uniqueness
-  try {
-    if (validator(movie)) {
-      if (!movies.filter((m) => m.title === movie.title).length) {
-        // ideally handled by DB
-        movie.movie_id = `tt${generateId()}`
-        movies = movies.concat(movie)
-        res.json(movie)
-        return
-      }
-      throw new Error('Movie is not unique')
+  if (validator(movie)) {
+    if (!movies.filter((m) => m.title === movie.title).length) {
+      // ideally handled by DB
+      movie.movie_id = `tt${generateId()}`
+      movies = movies.concat(movie)
+      res.status(201).json(movie)
+      return
     }
-    throw new Error('Invalid Movie')
-  } catch (error) {
-    next(error)
+    res.status(400).send({ error: 'movie is not unique' }).end()
   }
+  res.status(400).send({ error: 'movie is not valid' }).end()
 })
 
 // update
 
-app.put('/api/movies/:id', (req, res, next) => {
+app.put('/api/movies/:id', (req, res) => {
   const movie = req.body
-  // validate and check uniqueness
-  try {
-    if (validator(movie)) {
-      if (!movies.filter((m) => m.title === movie.title && m.movie_id !== movie.movie_id).length) {
-        movies = movies.map((m) => (m.movie_id === movie.movie_id ? movie : m))
-        res.json(movie)
-        return
-      }
-      throw new Error('Movie is not unique')
-    }
-    throw new Error('Invalid Movie')
-  } catch (error) {
-    next(error)
+  if (!movies.map((m) => m.movie_id).includes(req.params.id)) {
+    res.status(404).send({ error: 'movie does not exist' }).end()
   }
+  // validate and check uniqueness
+  if (validator(movie)) {
+    if (!movies.filter((m) => m.title === movie.title && m.movie_id !== req.params.id).length) {
+      movies = movies.map((m) => (m.movie_id === req.params.id ? movie : m))
+      res.json(movie)
+      return
+    }
+    res.status(400).send({ error: 'movie is not unique' }).end()
+  }
+  res.status(400).send({ error: 'movie is not valid' }).end()
 })
 
 // delete
@@ -80,11 +75,7 @@ app.delete('/api/movies/:id', (req, res) => {
   res.sendStatus(204)
 })
 
-const errorHandler = (req, res, error) => {
-  res.status(400).send({ error: error.message })
-}
-
-app.use(errorHandler)
-
 // port could be extracted out into a config file
 app.listen(3001)
+
+module.exports = app

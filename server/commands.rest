@@ -12,8 +12,8 @@ POST http://localhost:3001/api/movies
 content-type: application/json
 
 {
-  "title": "The Shawshank Redemption",
-  "year": 1994,
+  "title": "The Shawshank Redemption 2",
+  "year": 1223,
   "rating": 9.3,
   "genre": ["Drama"],
   "duration": "2h 22m"
